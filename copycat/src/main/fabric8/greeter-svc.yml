@@ -1,0 +1,24 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ${project.artifactId}-svc
+  labels:
+    provider: fabric8
+    app: ${project.artifactId}
+    version: ${project.version}
+    group: ${project.groupId}
+    hystrix.enabled: true
+spec:
+  selector:
+    provider: fabric8
+    app: ${project.artifactId}
+    version: ${project.version}
+    group: ${project.groupId}
+    hystrix.enabled: true
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+

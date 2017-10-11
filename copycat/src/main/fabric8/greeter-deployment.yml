@@ -1,0 +1,41 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ${project.artifactId}-deployment
+  labels:
+    provider: fabric8
+    app: ${project.artifactId}
+    version: ${project.version}
+    group: ${project.groupId}
+    hystrix.enabled: true
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      provider: fabric8
+      app: ${project.artifactId}
+      version: ${project.version}
+      group: ${project.groupId}
+      hystrix.enabled: true
+  template:
+    metadata:
+      labels:
+        provider: fabric8
+        app: ${project.artifactId}
+        version: ${project.version}
+        group: ${project.groupId}
+        hystrix.enabled: true
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        name: ${project.artifactId}
+        image: ${docker.image}
+        ports:
+        - containerPort: 8080
+          name: http
+          initialDelaySeconds: 5
